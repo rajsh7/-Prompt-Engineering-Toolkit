@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "createdAt": "2025-11-19T12:07:29.171Z",
+    "author": "Your Name"
+  },
+  "basePrompt": "Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.",
+  "variations": [
+    {
+      "id": "7f95bb33-ebf9-43a3-80f7-3ce3b6354b23",
+      "type": "system-role:expert",
+      "prompt": "System: You are an expert assistant with deep domain knowledge.\nUser: Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.",
+      "evaluation": {
+        "clarity": 65,
+        "specificity": 45,
+        "keywordCoverage": 0,
+        "testScore": 0,
+        "overall": 28,
+        "foundKeywords": []
+      }
+    },
+    {
+      "id": "3155b2ad-d2be-47e7-8d48-fb05c5e3f517",
+      "type": "few-shot",
+      "prompt": "Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.",
+      "evaluation": {
+        "clarity": 100,
+        "specificity": 45,
+        "keywordCoverage": 0,
+        "testScore": 0,
+        "overall": 36,
+        "foundKeywords": []
+      }
+    },
+    {
+      "id": "befd6f38-964a-4656-bdf4-a805cad65174",
+      "type": "tight-constraints",
+      "prompt": "Instruction: Be concise and precise.\nUser: Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.",
+      "evaluation": {
+        "clarity": 79,
+        "specificity": 45,
+        "keywordCoverage": 0,
+        "testScore": 0,
+        "overall": 31,
+        "foundKeywords": []
+      }
+    },
+    {
+      "id": "85102aa1-a44b-4a93-875b-c8c37cb99f96",
+      "type": "paraphrase",
+      "prompt": "Generate a concise product description for a bluetooth headphone aimed at students. Include price range and ma...",
+      "evaluation": {
+        "clarity": 97,
+        "specificity": 45,
+        "keywordCoverage": 0,
+        "testScore": 0,
+        "overall": 36,
+        "foundKeywords": []
+      }
+    },
+    {
+      "id": "6a57c283-c2f3-405c-aa5e-e6a1ff37bf1a",
+      "type": "keyword-injection",
+      "prompt": "Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.",
+      "evaluation": {
+        "clarity": 100,
+        "specificity": 45,
+        "keywordCoverage": 0,
+        "testScore": 0,
+        "overall": 36,
+        "foundKeywords": []
+      }
+    }
+  ],
+  "exportedAt": "2025-11-19T12:07:29.174Z"
+}
