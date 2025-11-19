@@ -5,9 +5,9 @@ Supported Gemini models (configured / tested)
 
 This project is set up to work with two Gemini model IDs by default. Use exactly these IDs in the UI model selector:
 
-gemini-2.5-flash-lite (recommended — lower latency / lighter).
+gemini-2.5 pro (recommended — lower latency / lighter).
 
-gemini-2.5-flash (higher capability / occasionally higher load).
+gemini-2.0-flash (higher capability / occasionally higher load).
 
 These are the two models the app UI and server default to; if your API key can access others you may select them from the dropdown populated by the server. If you get a 404 error, call the server's GET /api/list-models to see valid model IDs for your key.
 
