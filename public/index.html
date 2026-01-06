@@ -1,0 +1,1952 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prompt Engineering Toolkit — Gemini-enabled</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Embedded SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23g)'/%3E%3Ctext x='50' y='57' font-size='46' text-anchor='middle' font-family='Arial, sans-serif' fill='white' font-weight='700'%3EPT%3C/text%3E%3C/svg%3E" />
+
+  <style>
+    /* ============================================
+       CSS CUSTOM PROPERTIES
+    ============================================ */
+    :root {
+      --bg-primary: #030712;
+      --bg-secondary: #0a0f1a;
+      --bg-tertiary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.6);
+      --card-bg-hover: rgba(31, 41, 55, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-hover: rgba(255, 255, 255, 0.15);
+      --accent-primary: #8b5cf6;
+      --accent-secondary: #06b6d4;
+      --accent-tertiary: #ec4899;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-error: #ef4444;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --gradient-1: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+      --gradient-2: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      --gradient-3: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.3);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    /* ============================================
+       RESET & BASE STYLES
+    ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       ANIMATED BACKGROUND
+    ============================================ */
+    .bg-animated {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-gradient {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(6, 182, 212, 0.1), transparent),
+        radial-gradient(ellipse 60% 40% at 0% 80%, rgba(236, 72, 153, 0.1), transparent);
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--accent-primary);
+      top: -200px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--accent-secondary);
+      bottom: -150px;
+      left: -100px;
+      animation-delay: -7s;
+    }
+
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      background: var(--accent-tertiary);
+      top: 50%;
+      left: 50%;
+      animation-delay: -14s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, -50px) scale(1.1); }
+      50% { transform: translate(-30px, 30px) scale(0.9); }
+      75% { transform: translate(-50px, -30px) scale(1.05); }
+    }
+
+    /* Particles */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: particleFloat 15s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* ============================================
+       LAYOUT
+    ============================================ */
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================
+       HEADER
+    ============================================ */
+    header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.08));
+      backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 24px 32px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      animation: slideDown 0.6s var(--transition-bounce);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes slideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-lg);
+      background: var(--gradient-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: white;
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+      position: relative;
+      animation: logoPulse 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: inherit;
+      background: var(--gradient-1);
+      z-index: -1;
+      opacity: 0.5;
+      filter: blur(15px);
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes logoGlow {
+      0% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    .header-content {
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .lead {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-width: 600px;
+    }
+
+    .header-meta {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--accent-success);
+      font-weight: 500;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    .status-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-success);
+      border-radius: 50%;
+      animation: statusBlink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    }
+
+    @keyframes statusBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .version-tag {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .version-tag code {
+      background: rgba(139, 92, 246, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-primary);
+    }
+
+    /* ============================================
+       MAIN GRID
+    ============================================ */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 24px;
+      animation: fadeInUp 0.6s var(--transition-normal) 0.2s backwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================
+       CARDS
+    ============================================ */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .card:hover {
+      border-color: var(--glass-border-hover);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .card + .card {
+      margin-top: 20px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .card-title h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* ============================================
+       FORM ELEMENTS
+    ============================================ */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      transition: color var(--transition-fast);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all var(--transition-normal);
+      outline: none;
+    }
+
+    input[type="text"]:hover,
+    select:hover,
+    textarea:hover {
+      border-color: var(--glass-border-hover);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15), var(--shadow-sm);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="text"]:focus + .input-glow,
+    textarea:focus + .input-glow {
+      opacity: 1;
+    }
+
+    .input-glow {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 2px;
+      background: var(--gradient-1);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+      filter: blur(4px);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 44px;
+    }
+
+    /* Custom Select Styling */
+    select option {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      padding: 12px;
+    }
+
+    /* Project Name Special Styling */
+    #projectName {
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(6, 182, 212, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      letter-spacing: -0.01em;
+    }
+
+    #projectName:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1), 0 0 30px rgba(139, 92, 246, 0.1);
+    }
+
+    /* Row Layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================
+       MODEL SELECT ENHANCED
+    ============================================ */
+    .model-select-wrapper {
+      position: relative;
+    }
+
+    .model-select-wrapper select {
+      padding: 16px 50px 16px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.25);
+    }
+
+    .model-select-wrapper select:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+
+    .model-select-wrapper select:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15), 0 8px 25px rgba(139, 92, 246, 0.15);
+    }
+
+    .model-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-top: 10px;
+    }
+
+    .model-badge svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-1);
+      color: white;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--glass-border-hover);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--gradient-3);
+      color: white;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f43f5e, #ef4444);
+      color: white;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+    }
+
+    .btn-sm {
+      padding: 10px 16px;
+      font-size: 0.85rem;
+    }
+
+    /* Loading State */
+    .btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .btn.loading .btn-text {
+      opacity: 0;
+    }
+
+    .btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================================
+       RESULTS SECTION
+    ============================================ */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .results-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .results-title h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--accent-success);
+      font-weight: 500;
+    }
+
+    .status-indicator.loading {
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--accent-primary);
+    }
+
+    .status-indicator.loading::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--accent-primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    #results {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .empty-state h4 {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 0.9rem;
+    }
+
+    /* ============================================
+       VARIATION CARDS
+    ============================================ */
+    .variation {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: all var(--transition-normal);
+      animation: slideInRight 0.4s var(--transition-normal) backwards;
+    }
+
+    .variation:hover {
+      border-color: var(--glass-border-hover);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .variation:nth-child(1) { animation-delay: 0.1s; }
+    .variation:nth-child(2) { animation-delay: 0.15s; }
+    .variation:nth-child(3) { animation-delay: 0.2s; }
+    .variation:nth-child(4) { animation-delay: 0.25s; }
+    .variation:nth-child(5) { animation-delay: 0.3s; }
+    .variation:nth-child(6) { animation-delay: 0.35s; }
+
+    .variation-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .variation-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .variation-type-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-base {
+      background: var(--gradient-1);
+      color: white;
+    }
+
+    .badge-clarity {
+      background: rgba(6, 182, 212, 0.2);
+      color: var(--accent-secondary);
+    }
+
+    .badge-specificity {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-success);
+    }
+
+    .badge-expanded {
+      background: rgba(236, 72, 153, 0.2);
+      color: var(--accent-tertiary);
+    }
+
+    .badge-constrained {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--accent-warning);
+    }
+
+    .badge-creative {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--accent-primary);
+    }
+
+    .variation-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .metric-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .metric-bar {
+      width: 50px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .metric-fill {
+      height: 100%;
+      background: var(--gradient-1);
+      border-radius: 2px;
+      transition: width var(--transition-slow);
+    }
+
+    .gemini-output {
+      margin-top: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(6, 182, 212, 0.05));
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      min-height: 50px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .gemini-output.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-left-color: var(--accent-error);
+      color: #fca5a5;
+    }
+
+    .gemini-output.loading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+    }
+
+    .gemini-output.loading::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--accent-primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* ============================================
+       CHECKLIST CARD
+    ============================================ */
+    .checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .checklist li:hover {
+      color: var(--text-primary);
+    }
+
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      color: var(--accent-success);
+    }
+
+    .checklist code {
+      background: rgba(139, 92, 246, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      color: var(--accent-primary);
+    }
+
+    /* ============================================
+       TOAST NOTIFICATIONS
+    ============================================ */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      animation: toastSlideIn 0.4s var(--transition-bounce);
+      max-width: 400px;
+    }
+
+    @keyframes toastSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .toast.toast-success {
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .toast.toast-error {
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .toast-icon {
+      font-size: 1.2rem;
+    }
+
+    .toast-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      font-size: 1.2rem;
+      transition: color var(--transition-fast);
+    }
+
+    .toast-close:hover {
+      color: var(--text-primary);
+    }
+
+    /* ============================================
+       SCROLLBAR
+    ============================================ */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.5);
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 16px;
+      }
+
+      header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .header-meta {
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .btn-group {
+        justify-content: center;
+      }
+
+      .variation-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+    /* ============================================
+       THEME TOGGLE
+    ============================================ */
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: all var(--transition-normal);
+      z-index: 100;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(15deg);
+      border-color: var(--accent-primary);
+    }
+
+    /* ============================================
+       PROGRESS BAR
+    ============================================ */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--gradient-1);
+      z-index: 1001;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+    }
+
+    /* ============================================
+       TOOLTIP
+    ============================================ */
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      padding: 8px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-fast);
+    }
+
+    [data-tooltip]:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-12px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animated">
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="particles" id="particles"></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main App -->
+  <div class="app-container">
+    <header>
+      <div class="logo" aria-hidden="true">
+        <span>PT</span>
+      </div>
+      <div class="header-content">
+        <h1>Prompt Engineering Toolkit</h1>
+        <p class="lead">Generate intelligent prompt variants, evaluate with advanced heuristics, and test responses with Gemini AI. Export professional prompt packs instantly.</p>
+      </div>
+      <div class="header-meta">
+        <div class="status-badge" id="connectionStatus">
+          <span>Connected</span>
+        </div>
+        <div class="version-tag">
+          <code>v2.0</code> • Node 18+
+        </div>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <!-- Left Column: Controls -->
+      <section class="controls-section">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-icon">⚡</div>
+            <h3>Prompt Configuration</h3>
+          </div>
+
+          <div class="form-group">
+            <label for="projectName">Project Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="projectName" placeholder="My Awesome Prompt Pack — e.g., Product Descriptions" />
+              <div class="input-glow"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="basePrompt">Base Prompt</label>
+            <div class="input-wrapper">
+              <textarea id="basePrompt" placeholder="Enter your base prompt here...">Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.</textarea>
+              <div class="input-glow"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="keywords">Keywords <span style="color: var(--text-muted)">(comma-separated)</span></label>
+              <div class="input-wrapper">
+                <input type="text" id="keywords" placeholder="e.g., durable, long battery, budget-friendly" />
+                <div class="input-glow"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="constraints">Constraints <span style="color: var(--text-muted)">(comma-separated)</span></label>
+              <div class="input-wrapper">
+                <input type="text" id="constraints" placeholder="e.g., max 50 words, bullet points" />
+                <div class="input-glow"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="examples">Few-shot Examples <span style="color: var(--text-muted)">(one per line: input|output)</span></label>
+            <div class="input-wrapper">
+              <textarea id="examples" placeholder="Premium headphones|Immerse yourself in crystal-clear sound...&#10;Budget earbuds|Great sound at an unbeatable price..."></textarea>
+              <div class="input-glow"></div>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="generateVariations()" data-tooltip="Generate 5 smart prompt variants">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span class="btn-text">Generate Variations</span>
+            </button>
+            <button class="btn btn-secondary" onclick="evaluateBase()" data-tooltip="Analyze base prompt quality">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span class="btn-text">Evaluate</span>
+            </button>
+            <button class="btn btn-success" onclick="exportPack()" data-tooltip="Export as JSON file">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="btn-text">Export</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-icon">🤖</div>
+            <h3>Model Settings</h3>
+          </div>
+
+          <div class="form-group">
+            <label for="modelSelect">Select Gemini Model</label>
+            <div class="model-select-wrapper">
+              <select id="modelSelect">
+                <option value="gemini-2.5-flash">✨ Gemini 2.5 Flash</option>
+                <option value="gemini-2.0-flash-lite" selected>⚡ Gemini Flash Lite Latest</option>
+                <option value="gemini-2.5-flash-lite">🚀 Gemini 2.5 Flash Lite</option>
+              </select>
+            </div>
+            <div class="model-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              3 Models Available
+            </div>
+          </div>
+
+          <div id="modelHint" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">
+            <span style="color: var(--accent-success);">✓</span> 
+            Select a model optimized for your use case. Flash Lite is recommended for fast responses.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-icon">✅</div>
+            <h3>Quick Setup Checklist</h3>
+          </div>
+
+          <ul class="checklist">
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Node.js 18+ installed on your system</span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Create <code>.env</code> file with <code>GEMINI_API_KEY=AIza...</code></span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Run <code>npm install</code> to install dependencies</span>
+            </li>
+            <li>
+              <span class="check-icon">✓</span>
+              <span>Start with <code>node server.js</code></span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Right Column: Results -->
+      <aside class="results-section">
+        <div class="card" style="min-height: 600px;">
+          <div class="results-header">
+            <div class="results-title">
+              <div class="card-icon" style="width: 36px; height: 36px; font-size: 1rem;">🎯</div>
+              <div>
+                <h3>Results & Tests</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Generated variations appear here</p>
+              </div>
+            </div>
+            <div class="status-indicator" id="statusIndicator">
+              Ready
+            </div>
+          </div>
+
+          <div id="results">
+            <div class="empty-state">
+              <div class="empty-state-icon">🚀</div>
+              <h4>No Variations Yet</h4>
+              <p>Click "Generate Variations" to create prompt variants and test them with Gemini AI.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <script>
+    // ============================================
+    // FIXED MODEL LIST - Only 3 models
+    // ============================================
+    const AVAILABLE_MODELS = [
+      { id: 'gemini-2.5-flash', name: '✨ Gemini 2.5 Flash', description: 'Most capable, best for complex tasks' },
+      { id: 'gemini-2.0-flash-lite', name: '⚡ Gemini Flash Lite Latest', description: 'Fast and efficient, recommended' },
+      { id: 'gemini-2.5-flash-lite', name: '🚀 Gemini 2.5 Flash Lite', description: 'Balanced speed and capability' }
+    ];
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    
+    // Create particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+        container.appendChild(particle);
+      }
+    }
+
+    // Populate models dropdown (static list)
+    function populateModels() {
+      const sel = document.getElementById('modelSelect');
+      sel.innerHTML = '';
+      
+      AVAILABLE_MODELS.forEach((model, index) => {
+        const opt = document.createElement('option');
+        opt.value = model.id;
+        opt.textContent = model.name;
+        if (index === 1) opt.selected = true; // Default to Flash Lite Latest
+        sel.appendChild(opt);
+      });
+
+      // Update hint when model changes
+      sel.addEventListener('change', updateModelHint);
+      updateModelHint();
+      
+      showToast('3 Gemini models ready!', 'success');
+    }
+
+    function updateModelHint() {
+      const sel = document.getElementById('modelSelect');
+      const selectedModel = AVAILABLE_MODELS.find(m => m.id === sel.value);
+      const hintEl = document.getElementById('modelHint');
+      
+      if (selectedModel) {
+        hintEl.innerHTML = `
+          <span style="color: var(--accent-success);">✓</span> 
+          <strong>${selectedModel.name.replace(/^[✨⚡🚀]\s*/, '')}</strong> — ${selectedModel.description}
+        `;
+      }
+    }
+
+    // Toast notifications
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+      
+      toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span>${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+      `;
+      
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'toastSlideIn 0.3s ease reverse forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Progress bar
+    function setProgress(percent) {
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    // Status indicator
+    function setStatus(text, loading = false) {
+      const indicator = document.getElementById('statusIndicator');
+      indicator.textContent = text;
+      indicator.className = 'status-indicator' + (loading ? ' loading' : '');
+    }
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function unescapeHtml(s) {
+      return String(s)
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"');
+    }
+
+    function getTypeBadgeClass(type) {
+      const typeMap = {
+        'Base': 'badge-base',
+        'Clarity': 'badge-clarity',
+        'Specificity': 'badge-specificity',
+        'Expanded': 'badge-expanded',
+        'Constrained': 'badge-constrained',
+        'Creative': 'badge-creative'
+      };
+      return typeMap[type] || 'badge-base';
+    }
+
+    // ============================================
+    // MAIN FUNCTIONS
+    // ============================================
+    async function generateVariations() {
+      const basePrompt = document.getElementById('basePrompt').value;
+      const keywords = (document.getElementById('keywords').value || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      const constraints = (document.getElementById('constraints').value || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      const examplesRaw = (document.getElementById('examples').value || '')
+        .split('\n').map(l => l.trim()).filter(Boolean);
+      const examples = examplesRaw.map(line => {
+        const [input, output] = line.split('|').map(s => s ? s.trim() : '');
+        return { input: input || '', output: output || '' };
+      });
+
+      if (!basePrompt.trim()) {
+        showToast('Please enter a base prompt', 'error');
+        return;
+      }
+
+      try {
+        setStatus('Generating...', true);
+        setProgress(30);
+        
+        const resp = await fetch('/api/generate-variations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ basePrompt, keywords, constraints, examples })
+        });
+        
+        setProgress(70);
+        const data = await resp.json();
+        setProgress(100);
+        
+        displayVariations(data);
+        showToast('Generated ' + (data.variations.length + 1) + ' variations!', 'success');
+        
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      } finally {
+        setStatus('Ready');
+        setTimeout(() => setProgress(0), 500);
+      }
+    }
+
+    function displayVariations(data) {
+      const out = document.getElementById('results');
+      out.innerHTML = '';
+
+      // Base prompt card
+      const baseCard = document.createElement('div');
+      baseCard.className = 'variation';
+      baseCard.innerHTML = `
+        <div class="variation-header">
+          <div class="variation-type">
+            <span class="variation-type-badge badge-base">Base</span>
+            Base Prompt
+          </div>
+          <div class="variation-actions">
+            <button class="btn btn-primary btn-sm" onclick='testWithGemini("base")'>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Test
+            </button>
+            <button class="btn btn-secondary btn-sm btn-icon" onclick='copyPrompt("base")' data-tooltip="Copy prompt">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+        <pre id="base-prompt-pre">${escapeHtml(data.basePrompt)}</pre>
+        <div class="gemini-output" id="base-gemini-output" style="display: none;"></div>
+      `;
+      out.appendChild(baseCard);
+
+      // Variation cards
+      data.variations.forEach((v, index) => {
+        const div = document.createElement('div');
+        div.className = 'variation';
+        div.style.animationDelay = (0.1 + index * 0.05) + 's';
+        
+        const clarityWidth = (v.evaluation.clarity / 5) * 100;
+        const specificityWidth = (v.evaluation.specificity / 5) * 100;
+        const keywordWidth = v.evaluation.keywordCoverage;
+        
+        div.innerHTML = `
+          <div class="variation-header">
+            <div class="variation-type">
+              <span class="variation-type-badge ${getTypeBadgeClass(v.type)}">${v.type}</span>
+              Variation ${index + 1}
+            </div>
+            <div class="variation-actions">
+              <button class="btn btn-primary btn-sm" onclick='testWithGemini("${v.id}")'>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Test
+              </button>
+              <button class="btn btn-secondary btn-sm btn-icon" onclick='copyPrompt("${v.id}")' data-tooltip="Copy prompt">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <pre id="prompt-${v.id}">${escapeHtml(v.prompt)}</pre>
+          <div class="metrics">
+            <div class="metric">
+              Clarity
+              <div class="metric-bar"><div class="metric-fill" style="width: ${clarityWidth}%"></div></div>
+              <span class="metric-value">${v.evaluation.clarity}/5</span>
+            </div>
+            <div class="metric">
+              Specificity
+              <div class="metric-bar"><div class="metric-fill" style="width: ${specificityWidth}%"></div></div>
+              <span class="metric-value">${v.evaluation.specificity}/5</span>
+            </div>
+            <div class="metric">
+              Keywords
+              <div class="metric-bar"><div class="metric-fill" style="width: ${keywordWidth}%"></div></div>
+              <span class="metric-value">${keywordWidth}%</span>
+            </div>
+            <div class="metric">
+              Overall: <span class="metric-value">${v.evaluation.overall}</span>
+            </div>
+          </div>
+          <div class="gemini-output" id="gemini-output-${v.id}" style="display: none;"></div>
+        `;
+        out.appendChild(div);
+      });
+    }
+
+    function copyPrompt(id) {
+      const pre = id === 'base' 
+        ? document.getElementById('base-prompt-pre')
+        : document.getElementById(`prompt-${id}`);
+      
+      if (pre) {
+        navigator.clipboard?.writeText(pre.textContent);
+        showToast('Prompt copied to clipboard!', 'success');
+      }
+    }
+
+    function findPromptTextById(id) {
+      if (id === 'base') {
+        const pre = document.getElementById('base-prompt-pre');
+        return pre ? pre.textContent : null;
+      }
+      const pre = document.getElementById(`prompt-${id}`);
+      return pre ? pre.textContent : null;
+    }
+
+    function findOutputDivForId(id) {
+      if (id === 'base') return document.getElementById('base-gemini-output');
+      return document.getElementById(`gemini-output-${id}`);
+    }
+
+    async function testWithGemini(id) {
+      const prompt = findPromptTextById(id);
+      if (!prompt) {
+        showToast('Prompt not found', 'error');
+        return;
+      }
+      
+      const modelSelect = document.getElementById('modelSelect');
+      const model = modelSelect.value || 'gemini-2.0-flash-lite';
+      
+      const outDiv = findOutputDivForId(id);
+      if (!outDiv) {
+        showToast('Output container not found', 'error');
+        return;
+      }
+      
+      outDiv.style.display = 'block';
+      outDiv.className = 'gemini-output loading';
+      outDiv.textContent = 'Calling Gemini API...';
+      setStatus('Testing with Gemini...', true);
+      setProgress(50);
+
+      try {
+        const resp = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, model })
+        });
+        
+        setProgress(90);
+        const data = await resp.json();
+        
+        if (!data.ok) {
+          let msg = '';
+          if (data.hint) msg += data.hint + '\n';
+          msg += data.body || JSON.stringify(data);
+          outDiv.className = 'gemini-output error';
+          outDiv.textContent = 'Error: ' + msg;
+          showToast('Gemini API error', 'error');
+        } else {
+          outDiv.className = 'gemini-output';
+          outDiv.textContent = data.extracted || JSON.stringify(data.raw, null, 2);
+          showToast('Response received!', 'success');
+        }
+        
+      } catch (e) {
+        outDiv.className = 'gemini-output error';
+        outDiv.textContent = 'Error: ' + e.message;
+        showToast('Request failed', 'error');
+      } finally {
+        setStatus('Ready');
+        setProgress(100);
+        setTimeout(() => setProgress(0), 500);
+      }
+    }
+
+    async function evaluateBase() {
+      const prompt = document.getElementById('basePrompt').value;
+      
+      if (!prompt.trim()) {
+        showToast('Please enter a base prompt', 'error');
+        return;
+      }
+      
+      const keywords = (document.getElementById('keywords').value || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      
+      setStatus('Evaluating...', true);
+      setProgress(50);
+      
+      try {
+        const resp = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, keywords, testCases: [] })
+        });
+        
+        setProgress(100);
+        const data = await resp.json();
+        
+        const out = document.getElementById('results');
+        const clarityWidth = (data.evaluation.clarity / 5) * 100;
+        const specificityWidth = (data.evaluation.specificity / 5) * 100;
+        const keywordWidth = data.evaluation.keywordCoverage;
+        
+        out.innerHTML = `
+          <div class="variation">
+            <div class="variation-header">
+              <div class="variation-type">
+                <span class="variation-type-badge badge-base">Analysis</span>
+                Base Prompt Evaluation
+              </div>
+            </div>
+            <pre>${escapeHtml(prompt)}</pre>
+            <div class="metrics">
+              <div class="metric">
+                Clarity
+                <div class="metric-bar"><div class="metric-fill" style="width: ${clarityWidth}%"></div></div>
+                <span class="metric-value">${data.evaluation.clarity}/5</span>
+              </div>
+              <div class="metric">
+                Specificity
+                <div class="metric-bar"><div class="metric-fill" style="width: ${specificityWidth}%"></div></div>
+                <span class="metric-value">${data.evaluation.specificity}/5</span>
+              </div>
+              <div class="metric">
+                Keywords
+                <div class="metric-bar"><div class="metric-fill" style="width: ${keywordWidth}%"></div></div>
+                <span class="metric-value">${keywordWidth}%</span>
+              </div>
+              <div class="metric">
+                Overall: <span class="metric-value">${data.evaluation.overall}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        showToast('Evaluation complete!', 'success');
+        
+      } catch (err) {
+        showToast('Evaluation failed: ' + err.message, 'error');
+      } finally {
+        setStatus('Ready');
+        setTimeout(() => setProgress(0), 500);
+      }
+    }
+
+    async function exportPack() {
+      const projectName = document.getElementById('projectName').value || 'prompt-pack';
+      const basePrompt = document.getElementById('basePrompt').value;
+      
+      if (!basePrompt.trim()) {
+        showToast('Please enter a base prompt', 'error');
+        return;
+      }
+      
+      const keywords = (document.getElementById('keywords').value || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      const constraints = (document.getElementById('constraints').value || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      const examplesRaw = (document.getElementById('examples').value || '')
+        .split('\n').map(l => l.trim()).filter(Boolean);
+      const examples = examplesRaw.map(line => {
+        const [input, output] = line.split('|').map(s => s ? s.trim() : '');
+        return { input: input || '', output: output || '' };
+      });
+
+      setStatus('Exporting...', true);
+      setProgress(30);
+
+      try {
+        const genResp = await fetch('/api/generate-variations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ basePrompt, keywords, constraints, examples })
+        });
+        
+        setProgress(60);
+        const genData = await genResp.json();
+        
+        const payload = {
+          projectName,
+          metadata: {
+            createdAt: new Date().toISOString(),
+            author: 'Prompt Engineering Toolkit'
+          },
+          basePrompt,
+          variations: genData.variations
+        };
+        
+        const resp = await fetch('/api/export', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        setProgress(90);
+        const d = await resp.json();
+        
+        if (d.ok) {
+          // Create download link
+          const link = document.createElement('a');
+          link.href = d.file;
+          link.download = projectName + '.json';
+          link.click();
+          showToast('Export successful! Download started.', 'success');
+        } else {
+          showToast('Export failed', 'error');
+        }
+        
+      } catch (err) {
+        showToast('Export error: ' + err.message, 'error');
+      } finally {
+        setStatus('Ready');
+        setProgress(100);
+        setTimeout(() => setProgress(0), 500);
+      }
+    }
+
+    // Theme toggle (placeholder for future enhancement)
+    function toggleTheme() {
+      showToast('Theme toggle coming soon!', 'info');
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      populateModels();
+      
+      // Add entrance animation to inputs
+      document.querySelectorAll('input, textarea, select').forEach((el, i) => {
+        el.style.animation = `fadeInUp 0.4s ease ${0.1 + i * 0.03}s backwards`;
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + Enter to generate
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        generateVariations();
+      }
+      // Ctrl/Cmd + E to export
+      if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        exportPack();
+      }
+    });
+  </script>
+</body>
+</html>
