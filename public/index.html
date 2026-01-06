@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Prompt Engineering Toolkit — Gemini-enabled</title>
 
+<<<<<<< HEAD
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1402,10 +1403,209 @@
               <span class="check-icon">✓</span>
               <span>Start with <code>node server.js</code></span>
             </li>
+=======
+  <!-- Embedded SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%237c3aed'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23g)'/%3E%3Ctext x='50' y='57' font-size='46' text-anchor='middle' font-family='Arial, sans-serif' fill='white' font-weight='700'%3EPT%3C/text%3E%3C/svg%3E" />
+
+  <style>
+    :root{
+      --bg-1: #0f172a;
+      --card-bg: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.06);
+      --accent-1: #7c3aed;
+      --accent-2: #06b6d4;
+      --muted: #cbd5e1;
+      --text: #e6eef8;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+    body{
+      background: linear-gradient(180deg, rgba(10,11,18,1) 0%, rgba(6,8,14,1) 40%, rgba(2,6,23,1) 100%);
+      color: var(--text);
+      padding:24px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    .wrap{width:100%;max-width:1100px}
+
+    header{
+      background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(6,182,212,0.12));
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:18px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+    .logo {
+      width:64px;height:64px;border-radius:12px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      display:flex;align-items:center;justify-content:center;
+      box-shadow: 0 6px 18px rgba(12,10,40,0.45);
+      font-weight:700;color:white;font-size:1.1rem;
+    }
+    .title { flex:1; }
+    h1{margin:0;font-size:1.35rem;letter-spacing:0.2px}
+    p.lead{margin:6px 0 0 0;color:var(--muted);font-size:0.95rem}
+
+    .grid{display:grid;grid-template-columns: 1fr 420px; gap:18px}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+      border-radius:12px;
+      padding:14px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+    }
+
+    label{display:block;color:var(--muted);font-size:0.85rem;margin-top:10px}
+    input[type="text"], select, textarea {
+      width:100%; padding:10px 12px; margin-top:6px;
+      border-radius:10px; border:1px solid rgba(255,255,255,0.05);
+      background: rgba(3,7,18,0.6); color: var(--text); font-size:0.95rem;
+      outline:none; transition: box-shadow .12s ease, transform .08s ease;
+    }
+    textarea{min-height:96px;resize:vertical}
+
+    input:focus, textarea:focus, select:focus { box-shadow: 0 6px 20px rgba(76,29,149,0.12); transform: translateY(-1px); }
+
+    .row{display:flex;gap:10px}
+    .row .col{flex:1}
+
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:10px; border:0; cursor:pointer;
+      font-weight:600; color:#fff;
+      box-shadow: 0 8px 18px rgba(12,10,40,0.35);
+      transition: transform .12s ease, box-shadow .12s;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{ background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); }
+    .btn.ghost{ background: transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); box-shadow:none; }
+    .btn.warn{ background: linear-gradient(90deg,#f97316,#f43f5e); }
+
+    .results-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .small{font-size:0.85rem;color:var(--muted)}
+    .variant { margin-top:12px; padding:12px; border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006));
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    .var-type{font-weight:700;margin-bottom:8px;color:#eaf2ff}
+    pre { background: rgba(0,0,0,0.35); padding:10px; border-radius:8px; overflow:auto; color:var(--text); margin:0; white-space:pre-wrap; word-break:break-word; font-size:0.95rem}
+    .meta { margin-top:8px; color:var(--muted); font-size:0.9rem }
+    .gemini-output{ margin-top:8px; padding:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006)); border-left:4px solid rgba(124,58,237,0.35); border-radius:6px; min-height:40px; color:var(--text); white-space:pre-wrap }
+    .footer-note{ margin-top:10px; font-size:0.82rem; color:var(--muted) }
+    .tag{ display:inline-block; padding:6px 8px; border-radius:999px; font-size:0.78rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); color:var(--muted) }
+
+    /* ---------- NEW STYLES: project name & transparent inputs ---------- */
+    /* Project Name - prominent */
+    #projectName {
+      font-size:1.05rem;
+      font-weight:700;
+      padding:14px 16px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--text);
+      letter-spacing:0.2px;
+      box-shadow: 0 6px 18px rgba(124,58,237,0.06);
+    }
+
+    /* Transparent / glassy style for keywords and constraints */
+    .glassy {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+    /* slightly different placeholder color */
+    input::placeholder, textarea::placeholder {
+      color: rgba(203,213,225,0.55);
+    }
+
+    /* focus accent for glassy inputs */
+    .glassy:focus {
+      box-shadow: 0 10px 30px rgba(6,182,212,0.08), 0 6px 20px rgba(124,58,237,0.06);
+      border-color: rgba(6,182,212,0.22);
+      transform: translateY(-1px);
+    }
+
+    /* responsive tweaks */
+    @media (max-width:480px) {
+      #projectName { font-size:1rem; padding:10px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true">PT</div>
+      <div class="title">
+        <h1>Prompt Engineering Toolkit</h1>
+        <p class="lead">Generate prompt variants, evaluate heuristics, and test variants on Gemini (free API). Export prompt packs for submission.</p>
+      </div>
+      <div style="text-align:right">
+        <div class="tag">Local • No paid keys required</div>
+        <div class="small" style="margin-top:8px">Node 18+ • dotenv supported</div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- left: controls -->
+      <section>
+        <div class="card">
+          <label style="margin-bottom:6px">Project Name</label>
+          <input id="projectName" placeholder="My Prompt Pack — e.g. Headphone Descriptions" />
+
+          <label style="margin-top:12px">Base Prompt</label>
+          <textarea id="basePrompt">Create a concise product description for a bluetooth headphone aimed at students. Include price range and main features.</textarea>
+
+          <div class="row" style="margin-top:6px">
+            <div class="col">
+              <label>Keywords (comma-separated)</label>
+              <input id="keywords" class="glassy" placeholder="e.g. durable, long battery, under $50" />
+            </div>
+            <div class="col">
+              <label>Constraints (comma-separated)</label>
+              <input id="constraints" class="glassy" placeholder="e.g. max 50 words, include bullet points" />
+            </div>
+          </div>
+
+          <label style="margin-top:10px">Few-shot examples (one per line as input|output)</label>
+          <textarea id="examples" placeholder="Input1|Output1\nInput2|Output2"></textarea>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <button class="btn primary" onclick="generateVariations()" title="Create 5 prompt variants and evaluate">Generate Variations</button>
+            <button class="btn ghost" onclick="evaluateBase()" title="Evaluate base prompt heuristically">Evaluate Base Prompt</button>
+            <button class="btn ghost" onclick="exportPack()" title="Export JSON of prompt pack">Export JSON</button>
+          </div>
+
+          <div style="margin-top:14px">
+            <label for="modelSelect">Model (select)</label>
+            <select id="modelSelect"></select>
+            <div id="modelHint" class="small" style="margin-top:6px">Loading models...</div>
+          </div>
+
+          <div class="footer-note">Tip: Set <code>GEMINI_API_KEY</code> in your environment or in <code>.env</code>. If model is overloaded, try another model from the dropdown.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Quick checklist</h3>
+          <ul style="margin:6px 0 0 18px;color:var(--muted)">
+            <li>Node 18+ installed</li>
+            <li><code>.env</code> contains <code>GEMINI_API_KEY=AIza...</code></li>
+            <li>Run <code>npm install</code> (first time) and <code>node server.js</code></li>
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
           </ul>
         </div>
       </section>
 
+<<<<<<< HEAD
       <!-- Right Column: Results -->
       <aside class="results-section">
         <div class="card" style="min-height: 600px;">
@@ -1428,12 +1628,28 @@
               <h4>No Variations Yet</h4>
               <p>Click "Generate Variations" to create prompt variants and test them with Gemini AI.</p>
             </div>
+=======
+      <!-- right: results -->
+      <aside>
+        <div class="card">
+          <div class="results-header">
+            <div>
+              <div style="font-weight:700">Variations & Gemini Tests</div>
+              <div class="small">Generate variants and click “Test with Gemini”</div>
+            </div>
+            <div class="small" id="statusIndicator">Ready</div>
+          </div>
+
+          <div id="results" style="margin-top:12px">
+            <!-- Variations inserted here -->
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
           </div>
         </div>
       </aside>
     </main>
   </div>
 
+<<<<<<< HEAD
   <!-- Theme Toggle Button -->
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
     🌙
@@ -1687,11 +1903,114 @@
             </div>
           </div>
           <div class="gemini-output" id="gemini-output-${v.id}" style="display: none;"></div>
+=======
+  <script>
+    // ---------- existing logic ----------
+    const fallbackModels = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.5-pro'];
+
+    async function populateModels() {
+      const sel = document.getElementById('modelSelect');
+      sel.innerHTML = '<option>Loading models...</option>';
+      try {
+        const resp = await fetch('/api/list-models');
+        if (!resp.ok) throw new Error('List models failed: ' + resp.status);
+        const data = await resp.json();
+        const models = [];
+        if (data && data.raw && Array.isArray(data.raw.models)) {
+          data.raw.models.forEach(m => {
+            if (m.name) {
+              const id = m.name.replace(/^models\//, '');
+              models.push({ id, display: id, metadata: m });
+            }
+          });
+        }
+        if (models.length === 0) throw new Error('No models returned');
+        sel.innerHTML = '';
+        models.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = m.display;
+          sel.appendChild(opt);
+        });
+        document.getElementById('modelHint').textContent = `Loaded ${models.length} models from API.`;
+      } catch (e) {
+        sel.innerHTML = '';
+        fallbackModels.forEach(id => {
+          const opt = document.createElement('option');
+          opt.value = id;
+          opt.textContent = id + ' (fallback)';
+          sel.appendChild(opt);
+        });
+        document.getElementById('modelHint').textContent = `Using fallback models. (${e.message})`;
+      }
+    }
+
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function unescapeHtml(s){ return String(s).replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'); }
+
+    async function generateVariations(){
+      const basePrompt = document.getElementById('basePrompt').value;
+      const keywords = (document.getElementById('keywords').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      const constraints = (document.getElementById('constraints').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      const examplesRaw = (document.getElementById('examples').value || '').split('\n').map(l=>l.trim()).filter(Boolean);
+      const examples = examplesRaw.map(line=>{
+        const [input, output] = line.split('|').map(s=>s? s.trim(): '');
+        return { input: input || '', output: output || '' };
+      });
+
+      try {
+        document.getElementById('statusIndicator').textContent = 'Generating variants...';
+        const resp = await fetch('/api/generate-variations', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ basePrompt, keywords, constraints, examples })
+        });
+        const data = await resp.json();
+        displayVariations(data);
+      } catch (err) {
+        alert('Error generating variations: ' + err.message);
+      } finally {
+        document.getElementById('statusIndicator').textContent = 'Ready';
+      }
+    }
+
+    function displayVariations(data){
+      const out = document.getElementById('results');
+      out.innerHTML = '';
+      // base prompt card
+      const baseCard = document.createElement('div');
+      baseCard.className = 'variant';
+      baseCard.innerHTML = `
+        <div class="var-type">Base Prompt</div>
+        <pre id="base-prompt-pre">${escapeHtml(data.basePrompt)}</pre>
+        <div class="meta" style="margin-top:8px">
+          <button class="btn primary" onclick='testWithGemini("base", null)'>Test with Gemini (selected)</button>
+          <button class="btn ghost" onclick='copyPrompt("${escapeHtml(data.basePrompt).replace(/"/g,"&quot;")}")'>Copy</button>
+          <div style="margin-top:8px" id="base-gemini-output" class="gemini-output small"></div>
+        </div>
+      `;
+      out.appendChild(baseCard);
+
+      data.variations.forEach(v=>{
+        const div = document.createElement('div');
+        div.className = 'variant';
+        div.id = `var-${v.id}`;
+        div.innerHTML = `
+          <div class="var-type">${v.type}</div>
+          <pre id="prompt-${v.id}">${escapeHtml(v.prompt)}</pre>
+          <div class="meta">Clarity: ${v.evaluation.clarity} | Specificity: ${v.evaluation.specificity} | Keywords: ${v.evaluation.keywordCoverage}% | Overall: ${v.evaluation.overall}</div>
+          <div style="margin-top:8px">
+            <button class="btn primary" onclick='testWithGemini("${v.id}", null)'>Test with Gemini</button>
+            <button class="btn ghost" onclick='copyPrompt("${escapeHtml(v.prompt).replace(/"/g,"&quot;")}")'>Copy</button>
+            <div id="gemini-output-${v.id}" class="gemini-output small"></div>
+          </div>
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
         `;
         out.appendChild(div);
       });
     }
 
+<<<<<<< HEAD
     function copyPrompt(id) {
       const pre = id === 'base' 
         ? document.getElementById('base-prompt-pre')
@@ -1702,6 +2021,9 @@
         showToast('Prompt copied to clipboard!', 'success');
       }
     }
+=======
+    function copyPrompt(p){ navigator.clipboard?.writeText(unescapeHtml(p)); alert('Prompt copied to clipboard'); }
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
 
     function findPromptTextById(id) {
       if (id === 'base') {
@@ -1717,6 +2039,7 @@
       return document.getElementById(`gemini-output-${id}`);
     }
 
+<<<<<<< HEAD
     async function testWithGemini(id) {
       const prompt = findPromptTextById(id);
       if (!prompt) {
@@ -1738,10 +2061,23 @@
       outDiv.textContent = 'Calling Gemini API...';
       setStatus('Testing with Gemini...', true);
       setProgress(50);
+=======
+    async function testWithGemini(id, forcedModel) {
+      const prompt = findPromptTextById(id);
+      if (!prompt) { alert('Prompt not found'); return; }
+      const modelSelect = document.getElementById('modelSelect');
+      const model = forcedModel || (modelSelect ? modelSelect.value : null) || 'gemini-2.5-flash-lite';
+
+      const outDiv = findOutputDivForId(id);
+      if (!outDiv) { alert('Output container not found'); return; }
+      outDiv.textContent = 'Calling Gemini...';
+      document.getElementById('statusIndicator').textContent = 'Calling Gemini...';
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
 
       try {
         const resp = await fetch('/api/gemini', {
           method: 'POST',
+<<<<<<< HEAD
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt, model })
         });
@@ -1749,10 +2085,17 @@
         setProgress(90);
         const data = await resp.json();
         
+=======
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ prompt, model })
+        });
+        const data = await resp.json();
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
         if (!data.ok) {
           let msg = '';
           if (data.hint) msg += data.hint + '\n';
           msg += data.body || JSON.stringify(data);
+<<<<<<< HEAD
           outDiv.className = 'gemini-output error';
           outDiv.textContent = 'Error: ' + msg;
           showToast('Gemini API error', 'error');
@@ -1950,3 +2293,75 @@
   </script>
 </body>
 </html>
+=======
+          outDiv.innerHTML = `<div class="error" style="color:#ffb4b4;font-weight:700">Gemini call failed: ${escapeHtml(msg)}</div>`;
+        } else {
+          outDiv.textContent = data.extracted || JSON.stringify(data.raw, null, 2);
+        }
+      } catch (e) {
+        outDiv.innerHTML = `<div class="error" style="color:#ffb4b4;font-weight:700">Error calling Gemini: ${escapeHtml(e.message)}</div>`;
+      } finally {
+        document.getElementById('statusIndicator').textContent = 'Ready';
+      }
+    }
+
+    async function evaluateBase(){
+      const prompt = document.getElementById('basePrompt').value;
+      const keywords = (document.getElementById('keywords').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      const resp = await fetch('/api/evaluate', {
+        method:'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ prompt, keywords, testCases: [] })
+      });
+      const data = await resp.json();
+      const out = document.getElementById('results');
+      out.innerHTML = `<div class="variant"><div style="font-weight:700">Base Prompt Evaluation</div><pre>${escapeHtml(prompt)}</pre>
+        <div class="meta">Clarity: ${data.evaluation.clarity} | Specificity: ${data.evaluation.specificity} | Keywords: ${data.evaluation.keywordCoverage}% | Overall: ${data.evaluation.overall}</div></div>`;
+    }
+
+    async function exportPack(){
+      const projectName = document.getElementById('projectName').value || 'prompt-pack';
+      const basePrompt = document.getElementById('basePrompt').value;
+      const keywords = (document.getElementById('keywords').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      const constraints = (document.getElementById('constraints').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      const examplesRaw = (document.getElementById('examples').value || '').split('\n').map(l=>l.trim()).filter(Boolean);
+      const examples = examplesRaw.map(line=>{
+        const [input, output] = line.split('|').map(s=>s? s.trim(): '');
+        return { input: input || '', output: output || '' };
+      });
+
+      const genResp = await fetch('/api/generate-variations', {
+        method:'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ basePrompt, keywords, constraints, examples })
+      });
+      const genData = await genResp.json();
+      const payload = {
+        projectName,
+        metadata: {
+          createdAt: new Date().toISOString(),
+          author: 'Your Name'
+        },
+        basePrompt,
+        variations: genData.variations
+      };
+      const resp = await fetch('/api/export', {
+        method:'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const d = await resp.json();
+      if (d.ok) {
+        const link = document.createElement('a');
+        link.href = d.file;
+        link.textContent = 'Download exported JSON';
+        link.className = 'export-link';
+        document.getElementById('results').appendChild(link);
+      } else {
+        alert('Export failed');
+      }
+    }
+
+    // init
+    populateModels();
+  </script>
+</body>
+</html>
+>>>>>>> c0bfdb1b177e3fbffcf2864a0b782010e29076cf
